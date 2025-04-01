@@ -1,7 +1,16 @@
 "use server"
 
+interface MakeVideoParams {
+    title: string;
+    callback_url: string;
+    width: number;
+    height: number;
+    avatar_id: string;
+    voice_id: string;
+    script: string;
+}
 
-export const fetchVideoUrl = async (videoId: string): Promise<any | null> => {
+export const fetchVideoUrl = async (videoId: string) => {
     const response = await fetch(`https://api.heygen.com/v1/video_status.get?video_id=${videoId}`, {
         headers: {
             'X-Api-Key': process.env.HEYGEN_API_KEY as string,
@@ -54,7 +63,7 @@ export const fetchVideoUrl = async (videoId: string): Promise<any | null> => {
     return null;
 };
 
-export const makeVideo = async ({ title, callback_url, width, height, avatar_id, voice_id, script }:any) => {
+export const makeVideo = async ({ title, callback_url, width, height, avatar_id, voice_id, script }: MakeVideoParams) => {
     try {
         const res = await fetch("https://api.heygen.com/v2/video/generate", {
             method: "POST",

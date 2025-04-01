@@ -13,10 +13,12 @@ export default function VideoPage() {
 
     useEffect(() => {
         const loadVideoUrl = async () => {
-            const resp = await fetchVideoUrl(video_id);
-            setVideoUrl(resp.url);
-            setStatus(resp.status)
-            console.log(resp.url)
+            const resp:any = await fetchVideoUrl(video_id);
+            if(resp){
+                setVideoUrl(resp.url);
+                setStatus(resp.status)
+                console.log(resp.url)
+            }
         };
         loadVideoUrl();
     }, [video_id]);

@@ -5,8 +5,8 @@ import ScriptInput from "./ScriptInput";
 
 export default function ClientComponent() {
 
-    const [selectedAvatarId, setSelectedAvatarId] = useState(null)
-    const [selectedAvatarVoiceId, setSelectedAvatarVoiceId] = useState(null)
+    const [selectedAvatarId, setSelectedAvatarId] = useState<string | null>(null)
+    const [selectedAvatarVoiceId, setSelectedAvatarVoiceId] = useState<string | null>(null)
 
     console.log(selectedAvatarId)
     console.log(selectedAvatarVoiceId)

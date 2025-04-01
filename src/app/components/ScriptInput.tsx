@@ -3,7 +3,13 @@ import { makeVideo } from '@/action/VideoAPI'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';
 
-function ScriptInput({ avatar_id, voice_id }: any) {
+interface ScriptInputProps {
+    avatar_id: string;
+    voice_id: string;
+  }
+  
+
+function ScriptInput({ avatar_id, voice_id }: ScriptInputProps) {
     const router = useRouter();
     const [script, setScript] = useState<string | null>(null)
     const [title, setTitle] = useState<string | null>(null)

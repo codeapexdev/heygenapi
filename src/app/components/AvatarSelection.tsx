@@ -1,11 +1,18 @@
 "use client"
 import React from 'react'
 import Image from "next/image";
+import { Dispatch, SetStateAction } from "react";
+
+interface AvatarSelectionProps {
+    setSelectedAvatarVoiceId: Dispatch<SetStateAction<string | null>>;
+    setSelectedAvatarId: Dispatch<SetStateAction<string | null>>;
+  }
+
 
 function AvatarSelection({
     setSelectedAvatarVoiceId,
     setSelectedAvatarId,
-    }: any) {
+    }: AvatarSelectionProps) {
 
     const dataAvatars = [
         {
@@ -35,9 +42,9 @@ function AvatarSelection({
             <h1 className="text-center text-8xl font-semibold text-[#333]">Select your Avatar</h1>
             <div className="flex gap-10">
 
-                {dataAvatars.map((data) => {
+                {dataAvatars.map((data, index) => {
                     return (
-                        <a className="rounded-2xl shadow-md bg-white flex flex-col items-center overflow-hidden"
+                        <a key={index} className="rounded-2xl shadow-md bg-white flex flex-col items-center overflow-hidden"
                             onClick={() => {
                                 setSelectedAvatarId(data.avatar_id)
                                 setSelectedAvatarVoiceId(data.voice_id)
