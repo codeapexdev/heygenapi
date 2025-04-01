@@ -1,8 +1,10 @@
 "use client"
 import { makeVideo } from '@/action/VideoAPI'
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation';
 
 function ScriptInput({ avatar_id, voice_id }: any) {
+    const router = useRouter();
     const [script, setScript] = useState<string | null>(null)
     const [title, setTitle] = useState<string | null>(null)
     const [width, setWidth] = useState<number | null>(720)
@@ -11,14 +13,38 @@ function ScriptInput({ avatar_id, voice_id }: any) {
 
 
     const makeAPICall = async () => {
-        if (title && callback_url && width && height && avatar_id && voice_id && script) {
-            console.log("Malking api", title, callback_url, width, height, avatar_id, voice_id, script)
-            await makeVideo({ title, callback_url, width, height, avatar_id, voice_id, script })
-        }else {
-            console.log("Malking api", title, callback_url, width, height, avatar_id, voice_id, script)
-            alert("Please fill in all the fields.")
+        if (title && callback_url && width && height && avatar_id && voice_id && script) {            
+            try {
+                const data: any = await makeVideo({ title, callback_url, width, height, avatar_id, voice_id, script });
+                console.log("data", data)
+                if (data?.data?.video_id) {
+                    // Redirect to the /video/[video_id] page
+                    router.push(`/video/${data.data.video_id}`);
+                } else {
+                    console.error("Video ID not returned:", data);
+                    alert("Video generation did not return a video ID. Please try again.");
+                }
+            } catch (error) {
+                console.error("Error during API call:", error);
+                alert("An error occurred while generating the video.");
+            }
+        } else {
+            console.log("Missing fields:", title, callback_url, width, height, avatar_id, voice_id, script);
+            alert("Please fill in all the fields.");
         }
-    }
+    };
+    // const makeAPICall = async () => {
+    //     if (title && callback_url && width && height && avatar_id && voice_id && script) {
+    //         console.log("Malking api", title, callback_url, width, height, avatar_id, voice_id, script)
+    //         const data:any = await makeVideo({ title, callback_url, width, height, avatar_id, voice_id, script })
+    //         if(data?.data?.video_id){
+    //             // Redirect to the /video/video_id
+    //         }
+    //     }else {
+    //         console.log("Malking api", title, callback_url, width, height, avatar_id, voice_id, script)
+    //         alert("Please fill in all the fields.")
+    //     }
+    // }
 
 
     return (

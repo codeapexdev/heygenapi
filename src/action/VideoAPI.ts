@@ -54,68 +54,59 @@ export const fetchVideoUrl = async (videoId: string): Promise<any | null> => {
     return null;
 };
 
-export const makeVideo = async ({ title, callback_url, width, height, avatar_id, voice_id, script }: any) => {
-    const response = await fetch("https://api.heygen.com/v2/video/generate", {
-        method: "POST",
-        headers: {
-            "accept": "application/json",
-            "content-type": "application/json",
-            "x-api-key": `${process.env.HEYGEN_API_KEY}`
-        },
-        body: JSON.stringify({
-            caption: false,
-            title: title,
-            callback_id: "string",
-            dimension: {
-                // width: 1280,
-                // height: 720
-                width: width,
-                height: height
+export const makeVideo = async ({ title, callback_url, width, height, avatar_id, voice_id, script }:any) => {
+    try {
+        const res = await fetch("https://api.heygen.com/v2/video/generate", {
+            method: "POST",
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json",
+                "x-api-key": `${process.env.HEYGEN_API_KEY}`
             },
-            video_inputs: [
-                {
-                    character: {
-                        type: "avatar",
-                        avatar_id: avatar_id,
-                        // talking_photo_id: "string",
-                        scale: 1,
-                        avatar_style: "normal",
-                        offset: {
-                            x: 0,
-                            y: 0
+            body: JSON.stringify({
+                caption: false,
+                title: title,
+                callback_id: "string",
+                dimension: {
+                    width: width,
+                    height: height
+                },
+                video_inputs: [
+                    {
+                        character: {
+                            type: "avatar",
+                            avatar_id: avatar_id,
+                            scale: 1,
+                            avatar_style: "normal",
+                            offset: { x: 0, y: 0 },
+                            talking_style: "stable",
+                            expression: "default"
                         },
-                        // matting: "string",
-                        // circle_background_color: "string",
-                        // talking_photo_style: "string",
-                        talking_style: "stable",
-                        expression: "default",
-                        // super_resolution: "string"
-                    },
-                    voice: {
-                        type: "text",
-                        voice_id: voice_id,
-                        input_text: script,
-                        speed: 1,
-                        pitch: 0,
-                        emotion: "Excited",
-                        locale: "string"
-                    },
-                    background: {
-                        type: "color",
-                        value: "#f4f4f4",
-                        // "": "string"  // Not valid in JSON; consider removing or naming it properly
+                        voice: {
+                            type: "text",
+                            voice_id: voice_id,
+                            input_text: script,
+                            speed: 1,
+                            pitch: 0,
+                            emotion: "Excited",
+                            locale: "string"
+                        },
+                        background: {
+                            type: "color",
+                            value: "#f4f4f4"
+                        }
                     }
-                }
-            ],
-            folder_id: "string",
-            callback_url: callback_url
-        })
-    })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.error("Error:", error));
+                ],
+                folder_id: "string",
+                callback_url: callback_url
+            })
+        });
 
-    console.log(response)
-    return(response)
-
-}
+        const data = await res.json();
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.error("Error:", error);
+        throw error; // or return an error response
+    }
+};
