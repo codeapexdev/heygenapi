@@ -63,28 +63,36 @@ export const fetchVideoUrl = async (videoId: string) => {
     return null;
 };
 
-export const makeVideo = async ({ title, callback_url, width, height, avatar_id, voice_id, script }: MakeVideoParams) => {
+export const makeVideo = async ({
+    title,
+    callback_url,
+    width,
+    height,
+    avatar_id,
+    voice_id,
+    script
+}: MakeVideoParams) => {
     try {
         const res = await fetch("https://api.heygen.com/v2/video/generate", {
             method: "POST",
             headers: {
-                "accept": "application/json",
+                accept: "application/json",
                 "content-type": "application/json",
-                "x-api-key": `${process.env.HEYGEN_API_KEY}`
+                "x-api-key": process.env.HEYGEN_API_KEY as string
             },
             body: JSON.stringify({
                 caption: false,
-                title: title,
-                callback_id: "string",
+                title,
+                callback_id: `cb_${Date.now()}`, // use dynamic or meaningful ID
                 dimension: {
-                    width: width,
-                    height: height
+                    width,
+                    height
                 },
                 video_inputs: [
                     {
                         character: {
                             type: "avatar",
-                            avatar_id: avatar_id,
+                            avatar_id,
                             scale: 1,
                             avatar_style: "normal",
                             offset: { x: 0, y: 0 },
@@ -93,12 +101,11 @@ export const makeVideo = async ({ title, callback_url, width, height, avatar_id,
                         },
                         voice: {
                             type: "text",
-                            voice_id: voice_id,
+                            voice_id,
                             input_text: script,
                             speed: 1,
-                            pitch: 0,
-                            emotion: "Excited",
-                            locale: "string"
+                            emotion: "Excited"
+                            // Removed "pitch" and "locale"
                         },
                         background: {
                             type: "color",
@@ -106,16 +113,16 @@ export const makeVideo = async ({ title, callback_url, width, height, avatar_id,
                         }
                     }
                 ],
-                folder_id: "string",
-                callback_url: callback_url
+                folder_id: "default", // replace if you use actual folders
+                callback_url
             })
         });
 
         const data = await res.json();
-        console.log(data);
+        console.log("🎥 Heygen response:", data);
         return data;
     } catch (error) {
-        console.error("Error:", error);
-        throw error; // or return an error response
+        console.error("❌ Error generating video:", error);
+        throw error;
     }
 };

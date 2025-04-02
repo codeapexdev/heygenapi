@@ -13,10 +13,10 @@ function ScriptInput({ avatar_id, voice_id }: ScriptInputProps) {
     const router = useRouter();
     const [script, setScript] = useState<string | null>(null)
     const [title, setTitle] = useState<string | null>(null)
-    const [width, setWidth] = useState<number | null>(720)
-    const [height, setHeight] = useState<number | null>(1280)
+    const [width, setWidth] = useState<number | null>(1280)
+    const [height, setHeight] = useState<number | null>(720)
     const callback_url = `${process.env.NEXT_PUBLIC_APP_URL}/api/heygen-webhook`
-
+    
 
     const makeAPICall = async () => {
         if (title && callback_url && width && height && avatar_id && voice_id && script) {            
